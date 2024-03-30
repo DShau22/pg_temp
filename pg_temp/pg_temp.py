@@ -1,4 +1,5 @@
 """Set up a temporary postgres DB"""
+
 import itertools
 import os
 import sys
@@ -358,6 +359,8 @@ class TempDB(object):
                 stdout=subprocess.DEVNULL,
             )
         elif self.pg_process:
+            pg_stop_cmd = ['pg_ctl', 'stop', '-D', self.pg_data_dir, '-m' 'fast']
+            self.run_cmd(pg_stop_cmd, level=2, bg=True).wait()
             self.pg_process.kill()
             self.pg_process.wait()
         for d in [self.pg_temp_dir]:
